@@ -40,6 +40,7 @@ Google Drive 的讀取限制
 針對第一點的時間限制，我們可以先在 Google Drive 建立一個資料夾，將所有要訓練的 dataset 上傳到此空間，然後將該 folder mapping 到 Colab 來使用。當然除了 dataset，訓練過程中會用到與可能產生的檔案也必須放置於資料夾，當訓練時間超過了 12 小時的時間限制，我們只要重新啟動該 Colab 頁面，便可讀取上次的 weights 檔繼續訓練。
 
 至於第二點 Google Drive 的檔案讀取限制，是指 Colab 持續讀取 Google Drive 檔案數目（約在 7000~8000左右），如果太多會 Time out 並出現 Input/Output error 的訊息，像是我打算建一個有 15,000 的資料夾，就出現了 error 訊息。
+<img width="768" height="64" alt="4-3-768x64" src="https://github.com/user-attachments/assets/c231f89d-e904-461c-957a-e9aea018c3b1" />
 
 
 
@@ -67,11 +68,13 @@ drive.mount(‘/content/gdrive’, force_remount=True)
 請從官網下載 dataset，這個不需申請，下載解壓後其檔案架構如下。該 dataset 使用的並非我們熟悉的PASCAL VOC 格式，您可請將其轉為 VOC 檔格式，也可以不轉換另外撰寫程式直接讀取其標記檔。
 
 原 dataset 架構：
+<img width="648" height="171" alt="5-3" src="https://github.com/user-attachments/assets/fccefa60-453b-48c5-b788-eeeb9a4efe75" />
 
 
 （圖片來源：曾成訓提供）
 
 轉檔後的 dataset 架構：
+<img width="651" height="92" alt="6-2" src="https://github.com/user-attachments/assets/f814d2de-75e1-4573-b1a7-9b7516f46fdd" />
 
 
 （圖片來源：曾成訓提供）
