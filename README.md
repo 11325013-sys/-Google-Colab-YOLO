@@ -18,6 +18,7 @@ Colab 最長的執行時間為 12 小時，但訓練 YOLO 通常都要來長達�
 
 將 Colab 加入 javascript whitelist
 Chrome：設定🡪網站設定🡪Javascript，將下列三個網域加入 white list，讓 Colab 頁面可長時間持續得執行而不會產生 javascript error。
+<img width="1318" height="390" alt="2-4" src="https://github.com/user-attachments/assets/b77a6015-b296-45a5-9f07-f27897fae90e" />
 
 
 （圖片來源：曾成訓提供）
