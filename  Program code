@@ -1,0 +1,254 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMYtRbVxCPc0hgFlfrmT2rN",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/11325013-sys/-Google-Colab-YOLO/blob/main/%20Program%20code\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "KLekr9c3F7Nm"
+      },
+      "outputs": [],
+      "source": [
+        "from google.colab import drive\n",
+        "\n",
+        "drive.mount(‘/content/gdrive’, force_remount=True)\n",
+        "\n",
+        "!ln -s ‘/content/gdrive/My Drive/space_Colab’ /WORK1"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import glob, os\n",
+        "import os.path\n",
+        "import shutil\n",
+        "\n",
+        "#YOLO folder must has: *.jpg and *.txt\n",
+        "img_count_total = 40000  #more than real number is ok\n",
+        "source_image_type = \".jpg\"\n",
+        "source_yololabel_type = \".txt\"\n",
+        "file_count_in_folder = 1000\n",
+        "source_dataset = \"/DATA1/Datasets_mine/labeled/crowd_human_dataset/yolo2/yolo\"\n",
+        "target_dataset = \"/WORK1/dataset/CrowdHuman_YOLO_10_folders\"\n",
+        "\n",
+        "if not os.path.exists(target_dataset):\n",
+        "  os.makedirs(target_dataset)\n",
+        "\n",
+        "for loop_folder in range(int(img_count_total/file_count_in_folder)+1):\n",
+        "  print(\"Loop count #{}\".format(loop_folder))\n",
+        "  for i, file in enumerate(glob.iglob(os.path.join(source_dataset, \"*\"+source_image_type))):\n",
+        "    if(i>=file_count_in_folder):\n",
+        "      break\n",
+        "\n",
+        "    filename = os.path.basename(file)\n",
+        "    file_mainname, file_extension = os.path.splitext(filename)\n",
+        "\n",
+        "    source_img_file = os.path.join(source_dataset, filename )\n",
+        "    source_txt_file = os.path.join(source_dataset, file_mainname + source_yololabel_type )\n",
+        "\n",
+        "    new_folder = os.path.join(target_dataset, str(loop_folder))\n",
+        "    if not os.path.exists( new_folder ):\n",
+        "      os.makedirs(new_folder)\n",
+        "\n",
+        "    target_img_file = os.path.join(new_folder, filename )\n",
+        "    target_txt_file = os.path.join(new_folder, file_mainname + source_yololabel_type )\n",
+        "\n",
+        "    try:\n",
+        "        print(\"#{}/{} move {},{}...\".format(loop_folder, i, filename, file_mainname + source_yololabel_type))\n",
+        "        shutil.move(source_img_file, target_img_file)\n",
+        "        shutil.move(source_txt_file, target_txt_file)\n",
+        "    except:\n",
+        "        print(\"#{}/{} move filed\".format(loop_folder, i))\n",
+        "        continue"
+      ],
+      "metadata": {
+        "id": "Ce7jgtzTF_D-"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "\n",
+        "from google.colab import drive\n",
+        "\n",
+        "drive.mount(‘/content/gdrive’, force_remount=True)\n",
+        "\n",
+        "%cd “/content/gdrive/My Drive/space_Colab\"\n",
+        "\n",
+        "git clone https://github.com/pjreddie/darknet"
+      ],
+      "metadata": {
+        "id": "WqtMhPc2F_GV"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#連接Google Drive\n",
+        "\n",
+        "from google.colab import drive\n",
+        "\n",
+        "drive.mount(‘/content/gdrive’, force_remount=True)\n",
+        "\n",
+        "#指向/WORK1\n",
+        "\n",
+        "!ln -s ‘/content/gdrive/My Drive/space_Colab’ /WORK1\n",
+        "\n",
+        "#將darknet加入可執行權限\n",
+        "\n",
+        "!ls -la /WORK1/darknet.official/darknet\n",
+        "\n",
+        "!chmod 755 /WORK1/darknet.official/darknet\n",
+        "\n",
+        "!ls -la /WORK1/darknet.official/darknet\n",
+        "\n",
+        "#下載YOLO COCO預訓練weights\n",
+        "\n",
+        "import requests, os\n",
+        "\n",
+        "weights_filename = “/WORK1/cfg_YOLO/Pretrained/yolov3.weights\"\n",
+        "\n",
+        "weights_url = “https://pjreddie.com/media/files/yolov3.weights\"\n",
+        "\n",
+        "#顯示圖片用\n",
+        "\n",
+        "def imShow(path):\n",
+        "\n",
+        "import cv2\n",
+        "\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "%matplotlib inline\n",
+        "\n",
+        "image = cv2.imread(path)\n",
+        "\n",
+        "height, width = image.shape[:2]\n",
+        "\n",
+        "resized_image = cv2.resize(image,(3*width, 3*height), interpolation = cv2.INTER_CUBIC)\n",
+        "\n",
+        "fig = plt.gcf()\n",
+        "\n",
+        "fig.set_size_inches(18, 10)\n",
+        "\n",
+        "plt.axis(“off\")\n",
+        "\n",
+        "#plt.rcParams[‘figure.figsize’] = [10, 5]\n",
+        "\n",
+        "plt.imshow(cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB))\n",
+        "\n",
+        "plt.show()\n",
+        "\n",
+        "if( not os.path.exists(weights_filename)):\n",
+        "\n",
+        "#download to google drive\n",
+        "\n",
+        "r = requests.get(weights_url, stream = True)\n",
+        "\n",
+        "with open(weights_filename, “wb\") as file:\n",
+        "\n",
+        "for block in r.iter_content(chunk_size = 1024):\n",
+        "\n",
+        "if block:\n",
+        "\n",
+        "file.write(block)\n"
+      ],
+      "metadata": {
+        "id": "42TPGkFtF_I_"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./darknet detect cfg/yolov3.cfg /WORK1/cfg_YOLO/Pretrained/yolov3.weights data/dog.jpg"
+      ],
+      "metadata": {
+        "id": "K6Q7GDolF_MW"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import drive\n",
+        "\n",
+        "drive.mount(‘/content/gdrive’, force_remount=True)\n",
+        "\n",
+        "!ln -s ‘/content/gdrive/My Drive/space_Colab’ /WORK1\n",
+        "\n",
+        "!ls -la /WORK1/darknet.official/darknet\n",
+        "\n",
+        "!chmod 755 /WORK1/darknet.official/darknet\n",
+        "\n",
+        "%cd /WORK1/darknet.official"
+      ],
+      "metadata": {
+        "id": "2Cl1cfXgGNsW"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./darknet detector train /WORK1/cfg_YOLO/cfg.crowdHuman_colab/obj.data /WORK1/cfg_YOLO/cfg.crowdHuman_colab/crowd_human_yolov3_colab.cfg /WORK1/cfg_YOLO/cfg.crowdHuman_colab/weights/crowd_human_yolov3_colab.backup\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "hftgBheWGNwc"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "EUv2srV5GN0O"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "xRVR1bUJGN3m"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
